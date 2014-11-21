@@ -10,6 +10,14 @@
                 "args" : 1
             },
             {
+                "op": "cd",
+                "longOpt" : "content_sub_dir",
+                "name": "content_sub_dir",
+                "description":"sub-directory under resources/content for record content files",
+                "required": false,
+                "args" : 1
+            },
+            {
                 "op": "fh",
                 "longOpt" : "hospitals_file",
                 "name": "hospital filepath",
