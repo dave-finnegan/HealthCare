@@ -1,0 +1,127 @@
+{
+    "HealthCare": {
+        "options": [
+            {
+                "op": "c",
+                "longOpt" : "count",
+                "name": "count",
+                "description":"number of records to insert",
+                "required": true,
+                "args" : 1
+            },
+            {
+                "op": "fh",
+                "longOpt" : "hospitals_file",
+                "name": "hospital filepath",
+                "description":"filename to import hospital data from",
+                "required": false,
+                "args" : 1
+            },
+            {
+                "op": "fp",
+                "longOpt" : "procedures_file",
+                "name": "procedure filepath",
+                "description":"filename to import procedure data from",
+                "required": false,
+                "args" : 1
+            },
+            {
+                "op": "fc",
+                "longOpt" : "city_file",
+                "name": "city filepath",
+                "description":"filename to import city data from",
+                "required": false,
+                "args" : 1
+            },
+            {
+                "op": "fs",
+                "longOpt" : "streets_file",
+                "name": "streets filepath",
+                "description":"filename to import street data from",
+                "required": false,
+                "args" : 1
+            },
+            {
+                "op": "ff",
+                "longOpt" : "first_file",
+                "name": "first filepath",
+                "description":"filename to import first name data from",
+                "required": false,
+                "args" : 1
+            },
+            {
+                "op": "fl",
+                "longOpt" : "last_file",
+                "name": "last filepath",
+                "description":"filename to import last name data from",
+                "required": false,
+                "args" : 1
+            }
+        ]
+    },
+    "ApplicationFramework" : {
+        "options": [
+            {
+                "op": "t",
+                "longOpt" : "threads",
+                "name": "number",
+                "description": "number of worker threads. Default 1",
+                args: 1
+            },
+            {
+                "op": "m",
+                "longOpt" : "mongos",
+                "name": "hostname:port",
+                "description": "',' delimited list of mongodb host to connect to. Default localhost:27017,",
+                "args": "multi",
+                "separator": ","
+            },
+            {
+                "op": "wc",
+                "longOpt" : "writeConcern",
+                "name": "concern",
+                "description": "write concern. Default = NORMAL",
+                "args": 1
+            },
+            {
+                "op": "wj",
+                "longOpt" : "journal",
+                "name": "journal",
+                "description": "enable write concern wait for journal commit"
+            },
+            {
+                "op": "ws",
+                "longOpt" : "fsync",
+                "name": "sync",
+                "description": "enable write concern wait for page flush"
+            },
+            {
+                "op": "pi",
+                "longOpt" : "printInterval",
+                "name": "interval",
+                "description": "print output every n seconds",
+                "args": "1"
+            },
+            {
+                "op": "ri",
+                "longOpt" : "reportInterval",
+                "name": "interval",
+                "description": "average stats over an time interval of i milleseconds",
+                "args": "1"
+            },
+            {
+                "op": "cr",
+                "longOpt" : "noPretty",
+                "name": "format",
+                "description": "print out in CR-delimited lines. Default is console mode pretty printing, when possible"
+            },
+            {
+                "op": "v",
+                "longOpt" : "verbose",
+                "name": "verbose",
+                "description": "Enabel verbose output",
+                "args": "1"
+            }
+        ]
+    }
+}

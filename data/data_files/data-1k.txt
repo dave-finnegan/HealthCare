@@ -1,0 +1,28 @@
+
+MongoDB
+
+Do What You Could Never Do Before
+
+What’s been holding you back? MongoDB is the next-generation database that lets you create applications never before possible.
+
+MONGODB IS FOR CIOs
+
+MongoDB can help you make a difference to the business. Tens of thousands of organizations, from startups to the largest companies and government agencies, choose MongoDB because it lets them build applications that weren’t possible before. With MongoDB, these organizations move faster than they could with relational databases at one tenth of the cost. With MongoDB, you can do things you could never do before. Find out how.
+
+WHO USES MONGODB?
+MetLife
+
+Building a single view of 100M+ customers across 70 systems in just 90 days
+Otto
+
+Offering one-to-one shopping for more than 2 million daily visitors across 2M products
+Bosch
+
+Creating new businesses by connecting sensors with real-time analytics
+City of Chicago
+
+Delivering a unified view of city operations on a real-time geospatial platform
+
+Copyright (c)2014 MongoDB, Inc.
+
+
