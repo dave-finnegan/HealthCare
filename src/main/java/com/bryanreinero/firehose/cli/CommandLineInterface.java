@@ -49,7 +49,7 @@ public class CommandLineInterface {
 	}
 
 	public void printHelp() {
-		formatter.printHelp("Firehose", options);
+		formatter.printHelp("HealthCare", options);
 	}
 
 	public void parse(String[] args) throws UnknownHostException,

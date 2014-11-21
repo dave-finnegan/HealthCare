@@ -53,7 +53,8 @@ public class Application {
 					w.cli.parse(args);
 				} catch ( MissingOptionException e) {
 					w.cli.printHelp();
-					throw new Exception( "bad options", e );
+                    System.exit(-1);
+					//throw new Exception( "bad options", e );
 				}
 				
 				MongoClient client;
