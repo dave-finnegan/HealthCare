@@ -32,7 +32,8 @@ public class Application {
 	public static final long DEFAULT_REPORTING_INTERVAL = 5;
 	
 	private int numThreads = 1; 
-	private List<ServerAddress> adresses = null;
+    private String db = "hcd";
+	private List<ServerAddress> addresses = null;
 	private String writeConcern = null;
 	private boolean journal = false;
 	private boolean fsync = false;
@@ -58,19 +59,19 @@ public class Application {
 				}
 				
 				MongoClient client;
-				if( w.adresses == null || w.adresses.isEmpty() ) 
+				if( w.addresses == null || w.addresses.isEmpty() ) 
 					client = new MongoClient();
 				else
-					client = new MongoClient(w.adresses);
+					client = new MongoClient(w.addresses);
 				
                 w.daoHospitals =
-                    new DAO(client.getDB("hcd").getCollection("hospitals"));
+                    new DAO(client.getDB(w.db).getCollection("hospitals"));
                 w.daoPhysicians =
-                    new DAO(client.getDB("hcd").getCollection("physicians"));
+                    new DAO(client.getDB(w.db).getCollection("physicians"));
                 w.daoPatients =
-                    new DAO(client.getDB("hcd").getCollection("patients"));
+                    new DAO(client.getDB(w.db).getCollection("patients"));
                 w.daoProcedures =
-                    new DAO(client.getDB("hcd").getCollection("procedures"));
+                    new DAO(client.getDB(w.db).getCollection("procedures"));
                 BasicDBObject proceduresIndex = new BasicDBObject()
                     .append("hospital", 1)
                     .append("physician", 1)
@@ -79,9 +80,9 @@ public class Application {
                     ;
                 w.daoProcedures.createIndex(proceduresIndex);
                 w.daoRecords =
-                    new DAO(client.getDB("hcd").getCollection("records"));
+                    new DAO(client.getDB(w.db).getCollection("records"));
                 w.daoContent =
-                    new DAO(client.getDB("hcd").getCollection("content"));
+                    new DAO(client.getDB(w.db).getCollection("content"));
 
 				if (  w.writeConcern != null ) {
                     w.daoHospitals.setConcern(w.writeConcern);
@@ -151,7 +152,7 @@ public class Application {
 
 			@Override
 			public void handle(String[] values) {
-				adresses = DAO.getServerAddresses(values);
+				addresses = DAO.getServerAddresses(values);
 
 			}
 
@@ -162,6 +163,15 @@ public class Application {
 			@Override
 			public void handle(String[] values) {
 				writeConcern = values[0];
+			}
+
+		});
+
+        // Database Name
+		cli.addCallBack("db", new CallBack() {
+			@Override
+			public void handle(String[] values) {
+				db = values[0];
 			}
 
 		});
