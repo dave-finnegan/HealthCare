@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.Random;
@@ -70,7 +71,17 @@ public class HealthCare implements Executor {
         public void handle(String[] values) {
             filename  = values[0];
             try {
-                br = new BufferedReader(new FileReader(filename));
+                System.out.println("dmf:filenm:"+filename);
+                InputStream is =
+                    HealthCare.class.getResourceAsStream(filename);
+                BufferedReader br = null;
+                if (is != null)
+                    // try resource file first
+                    br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+                else
+                    // try user specified filename
+                    br = new BufferedReader(new FileReader(filename));
+                //br = new BufferedReader(new FileReader(filename));
                 DBObjects = new ArrayList<DBObject>();
                 
                 // read header line from file
@@ -89,7 +100,6 @@ public class HealthCare implements Executor {
                     
                     // read the next line from source file
                     while ((ln=br.readLine()) != null) {
-                        
 
                         linesRead += 1;
                         
@@ -154,6 +164,20 @@ public class HealthCare implements Executor {
 
 		worker = Application.ApplicationFactory.getApplication
             (appName, this, args, myCallBacks);
+
+        if (hospitalCB.DBObjects == null)
+            hospitalCB.handle(new String[] {"/data/hospitals.dat"});
+        if (proceduresCB.DBObjects == null)
+            proceduresCB.handle(new String[] {"/data/procedures.dat"});
+        if (cityCB.DBObjects == null)
+            cityCB.handle(new String[] {"/data/city.dat"});
+        if (streetsCB.DBObjects == null)
+            streetsCB.handle(new String[] {"/data/streets.dat"});
+        if (lastCB.DBObjects == null)
+            lastCB.handle(new String[] {"/data/last.dat"});
+        if (firstCB.DBObjects == null)
+            firstCB.handle(new String[] {"/data/first.dat"});
+
 		samples = worker.getSampleSet();
         daoHospitals = worker.getDAO("hospitals");
         daoPhysicians = worker.getDAO("physicians");
@@ -170,11 +194,7 @@ public class HealthCare implements Executor {
     public void execute() {
 
         // dmf: To Do
-        // move data files to resources directory
-        //   change callbacks to be calls to read resource files and put
-        //   hospitals, procedures,city,streets,last, and first files 
-        //   in resources directory; that way they ship with the package
-        
+        // - copy full data files into resources/data dir
 
         try {
 

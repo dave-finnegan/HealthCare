@@ -91,7 +91,7 @@ Example run
 
 ::
 
- java -jar target/HealthCare-0.1.1.one-jar.jar -fh data/hospital-city-state -fp data/procedures -fc data/city-state-zip -fs data/streets -fl data/last -ff data/first -t 12 -c 1000
+ java -jar target/HealthCare-0.1.1.one-jar.jar -t 12 -c 1000
 
 Dependencies
 ------------
