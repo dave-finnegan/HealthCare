@@ -238,13 +238,19 @@ public class HealthCare implements Executor {
                     "data-13M.pdf"
                 };
                 int recordTypeIdx = rnd.nextInt(recordTypes.length);
-                String recordFile = recordFiles[recordTypeIdx];
-                File recordFP = new File("data/"+recordFile);
-                byte[] recordFileData = new byte[(int) recordFP.length()];
-                DataInputStream recordDIS =
-                    new DataInputStream(new FileInputStream(recordFP));
-                recordDIS.readFully(recordFileData);
-                recordDIS.close();
+                // Resource directory based content file
+                String recordFileSize = "small";
+                String recordFile =
+                    "/content/"+recordFileSize+"/"+recordFiles[recordTypeIdx];
+                InputStream recordFileIS =
+                    HealthCare.class.getResourceAsStream(recordFile);
+                DataInputStream recordFileDIS =
+                    new DataInputStream(recordFileIS);
+                int recordFileLength = recordFileIS.available();
+                byte[] recordFileData = new byte[recordFileLength];
+                recordFileDIS.readFully(recordFileData);
+                recordFileDIS.close();
+                recordFileIS.close();
                 BasicDBObject recordDoc = new BasicDBObject()
                     .append("_id", recordId)
                     .append("type", recordTypes[recordTypeIdx])
@@ -307,16 +313,20 @@ public class HealthCare implements Executor {
                     (rnd.nextInt(firstCB.linesRead)).get("name");
                 String patientLast = (String)lastCB.DBObjects.get
                     (rnd.nextInt (lastCB.linesRead)).get("name");
-                String patientStreet = (String)streetsCB.DBObjects.get
-                    (rnd.nextInt(streetsCB.linesRead)).get("name");
+                String patientStreet =
+                    Integer.toString(rnd.nextInt(1000))+" "+
+                    (String)streetsCB.DBObjects
+                    .get(rnd.nextInt(streetsCB.linesRead)).get("name");
+                int cityIdx = rnd.nextInt(cityCB.linesRead);
                 String patientCity = (String)cityCB.DBObjects.get
-                    (rnd.nextInt(cityCB.linesRead)).get("city");
+                    (cityIdx).get("city");
                 String patientState = (String)cityCB.DBObjects.get
-                    (rnd.nextInt(cityCB.linesRead)).get("state");
+                    (cityIdx).get("state");
                 Integer patientZip = (Integer)cityCB.DBObjects.get
-                    (rnd.nextInt(cityCB.linesRead)).get("zip");
+                    (cityIdx).get("zip");
                 BasicDBObject patientAddr =
-                    new BasicDBObject("street", patientStreet)
+                    new BasicDBObject()
+                    .append("street", patientStreet)
                     .append("city", patientCity)
                     .append("state", patientState)
                     .append("zip", patientZip);
@@ -360,16 +370,20 @@ public class HealthCare implements Executor {
                     (rnd.nextInt(firstCB.linesRead)).get("name");
                 String physicianLast = (String)lastCB.DBObjects.get
                     (rnd.nextInt (lastCB.linesRead)).get("name");
-                String physicianStreet = (String)streetsCB.DBObjects.get
-                    (rnd.nextInt(streetsCB.linesRead)).get("name");
+                String physicianStreet =
+                    Integer.toString(rnd.nextInt(1000))+" "+
+                    (String)streetsCB.DBObjects
+                    .get(rnd.nextInt(streetsCB.linesRead)).get("name");
+                cityIdx = rnd.nextInt(cityCB.linesRead);
                 String physicianCity = (String)cityCB.DBObjects.get
-                    (rnd.nextInt(cityCB.linesRead)).get("city");
+                    (cityIdx).get("city");
                 String physicianState = (String)cityCB.DBObjects.get
-                    (rnd.nextInt(cityCB.linesRead)).get("state");
+                    (cityIdx).get("state");
                 Integer physicianZip = (Integer)cityCB.DBObjects.get
-                    (rnd.nextInt(cityCB.linesRead)).get("zip");
+                    (cityIdx).get("zip");
                 BasicDBObject physicianAddr =
-                    new BasicDBObject("street", physicianStreet)
+                    new BasicDBObject()
+                    .append("street", physicianStreet)
                     .append("city", physicianCity)
                     .append("state", physicianState)
                     .append("zip", physicianZip);
@@ -406,12 +420,13 @@ public class HealthCare implements Executor {
                 // Hospital
                 Interval intHospitalTotal = samples.set("HospitalTotal");
                 Interval intHospitalBuild = samples.set("HospitalBuild");
+                int hospitalIdx = rnd.nextInt(hospitalCB.linesRead);
                 String hospitalName = (String)hospitalCB.DBObjects.get
-                    (rnd.nextInt(hospitalCB.linesRead)).get("name");
+                    (hospitalIdx).get("name");
                 String hospitalCity = (String)hospitalCB.DBObjects.get
-                    (rnd.nextInt(hospitalCB.linesRead)).get("city");
+                    (hospitalIdx).get("city");
                 String hospitalState = (String)hospitalCB.DBObjects.get
-                    (rnd.nextInt(hospitalCB.linesRead)).get("state");
+                    (hospitalIdx).get("state");
                 int hospitalBeds = rnd.nextInt(280) + 20; // min 20; max 300
                 Boolean[] hospitalBooleans = {true,false};
                 Boolean hospitalTraumaCenter = hospitalBooleans[rnd.nextInt(2)];
