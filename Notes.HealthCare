@@ -1,0 +1,151 @@
+  
+  Health Care Demo
+  
+  Data
+    Hospitals, Physicians, Patients, Procedures, Records
+  
+  Metrics (US numbers)
+    Hospitals             5k
+    Physicians            1M
+    Patients              300M 
+      People in US                318M
+    Procedures            72M per year
+      Admissions in US            36M
+      assume <10 procs per admission; likely 1-2
+      assume 100 diff types of procedure
+    Records               720M per year
+      assume ~10 recs per procedure
+  
+  Name lists
+    hospitals           250
+    physicians        50000
+    patients          50000
+      city-state-zip  10000
+      first            5000
+      last            50000
+      streets          5000
+    procedures          150
+    records             3-10x procedures
+  
+  References
+    Hospitals  - Physicians (n - n)
+    Physicians - Patients (n - n)
+    Patients   - Procedures (1 - n)
+    Procedures - Records (1 - n)
+  
+  Schema
+    hospitals 5k {
+      _id: integer - rnd(0-250)
+      name: string - hospitals[_id][0]
+      city: string - hospitals[_id][1]
+      state: string - hospitals[_id][2]
+      beds: integer - rnd(20-300)
+      trauma_center: boolean - rnd(true, false)
+      physicians: [phy_id, phy_id, ..]
+      }
+    physicians 1M {
+      _id: integer - rnd(0-1000000)
+      name: string - "Dr."+last[_id]
+      addr: {
+        street: string - streets[rnd(0-5000)]
+        city: string - city[cid][0]; cid=rnd(0-10000)
+        state: string - city[cid][1]
+        zip: int - city[cid][2]
+      }
+      hospitals: [hos_id, hos_id, ..] (1-60%, 2-30%, 3-10%); hos_id=rnd(0-250)
+      }
+    patients 300M {
+      _id: integer - rnd(0-300000000) # ssn
+      first: string - first[rnd(0-5000)]
+      last: string - last[rnd(0-50000)]
+      addr: {
+        street: string - streets[rnd(0-5000)]
+        city: string - city[cid][0]; cit=rnd(0-10000)
+        state: string - city[cid][1]
+        zip: int - city[cid][2]
+      }
+      physician: [phy_id, phy_id, ..] (1-60%, 2-30%, 3-10%); phy_id=rnd(0-50000)
+      procedure: [pro_id, pro_id, ..] (<10-80%, <100-20%); pro_id=rnd(0-150)
+      }
+    procedures 70M {
+      _id: integer - rnd(0-150)
+      type: string - procedures[_id]
+      date: date - rnd() - date in past 5 yrs
+      hospital: hos_id - rnd(0-250)
+      physician: phy_id - rnd(0-50000)
+      patient: pat_id - rnd(0-1000000000)
+      records: [rec_oid, rec_oid, ..]
+      }
+    records 700M {
+      _id: ObjectId() - rec_oid
+      type: string - rec_types[rnd(0-3)] 
+        # txt_1k(40%), jpg_200k(20%), pdf_500k(20%), pdf_1M(10%), pdf_13M(10%)
+      hospital: hos_id - rnd(0-250)
+      physician: phy_id - rnd(0-50000)
+      patient: pat_id - rnd(0-1000000000)
+      procedure: pro_id - rnd(0-150)
+      content: binary - rec_bin[type]
+        # data-1k.txt, data-200k.jpg, data-500k.pdf, data-1M.pdf, data-13M.pdf
+      }
+  
+  Queries
+    count of records in each collection
+      hcd_counts()
+    find patients with multiple procedures
+      hcd_multi_procs()
+      hcd.patients.find({ "procedures.1" : {$exists: true}},{first:1,last:1});
+    find hospital by city, state, phy_id
+      hcd_hospitals_count_by_state()
+      hcd.hospitals.aggregate([ {$group: {_id:"$state", count:{$sum:1}}}, {$sort: {count:1}}]);
+      hcd_hospitals_count_by_city()
+      hcd.hospitals.aggregate([ {$group: {_id:"$city", count:{$sum:1}}}, {$sort: {_id:1}}]);
+      hospitals_by_physician(phy_id)
+      hcd.hospitals.find({physicians:{$in:[phy_id]}},{_id:0,name:1});
+    find physician by city, state, hospital, procedure, record
+      hcd.physicians.find({"addr.city":"Warwick"},{"addr.city":1,"addr.state":1})
+      hcd.physicians.find({"addr.state":"NY"},{"addr.city":1,"addr.state":1})
+    find physician by procedure
+      hcd.procedures.find({type:"Tattoo Removal"},{_id:0,physician:1})
+    find patient by ssn (_id), name_first & name_last
+      hcd.patients.find({_id:254097009},{first:1,last:1})
+      hcd.patients.find({last:"Finnegan"},{first:1,last:1})
+    find procedure by patient, type, hospital, physician
+      hcd.procedures.findOne({patient:196423421},{_id:0,type:1})
+      hcd.procedures.find({type:"Tattoo Removal"},{_id:0,physician:1})
+      hcd.procedures.find({hospital:213},{_id:0,type:1})
+      hcd.procedures.find({hospital:213},{_id:0,type:1,physician:1})
+    find record by procedure, patient
+      hcd.procedures.find({type:"Tattoo Removal"},{_id:0,records:1})
+      hcd.records.find({_id:ObjectId("546e663bce12a37971d949af")})
+  
+  RESTful API
+    there should be one in support of all queries, inserts, udpates, and deletes
+  
+  Performance Testing - looking for procs/sec and recs(mb)/sec
+    # create procedures & recs; create patient, physician, and hospital as needed
+    proc_id = choose random procedure (1-100)
+      pat_id = choose random patient (1-300M)
+        if !exist create_patient
+          choose 1-3 random physicians (1-40%, 2-30%, 3-30%)
+            if !exist create_physician
+              choose 1-3 random hospitals (1-60%, 2-30%, 1-10%)
+                if !exist create_hospital
+          create patient w/ 1-3 phy_ids and 1-3 hos_ids
+      phy_id = choose random phs_id from patient phy_id array
+      hos_id = choose random hos_id from patient phy_id array
+      rec_cnt = random (1-10)
+      create procedure
+        for (rcnt=0; rcnt<rec_cnt; ++rcnt)
+          recs[rcnt] = create_record (random type from rxt, pdf, jpg, mp4)
+        type = proc_id
+        date = new Date()
+        hospital = hos_id
+        physician = phy_id
+        patient = pat_id
+        records = recs
+  
+  Reproduce with C* (time permitting)
+    showing multiple "views" in lieu of secondary indexing
+    compare throughput - proc/sec, recs(mb)/sec
+    compare development time
+    compare maintenance time
