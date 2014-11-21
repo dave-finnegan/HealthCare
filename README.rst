@@ -106,8 +106,7 @@ Additional dependencies are:
     
 License
 -------
-Copyright (C) {2014}  {Dave Finnegan}
-Copyright (C) {2013}  {Bryan Reinero}
+Copyright (C) {2014}  {Dave Finnegan}, {2013}  {Bryan Reinero}
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
