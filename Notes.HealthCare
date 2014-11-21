@@ -2,8 +2,17 @@
   Health Care Demo
   
   To Do
+    - how to 'properly' exit from threads
+      I'm getting exceptions as one thread "finishes" all the work and then
+        stops all the other threads - some of which are still working!
     - update samples final summary output to show summary totals from metrics
       total time spent in insert, update, query, build, etc
+    - command line handling
+      why throw excpetions?!
+      should print a useful message and show usage
+        switch not recognized
+        missing required arg 'x'
+        etc
   
   Data
     Hospitals, Physicians, Patients, Procedures, Records
