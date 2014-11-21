@@ -34,6 +34,7 @@ public class HealthCare implements Executor {
 	private final SampleSet samples;
 
     private Integer maxCount = 0;
+    private String contentSubDir = "small";
 	private AtomicInteger count = new AtomicInteger(0);
 
 	private AtomicInteger countHospitals = new AtomicInteger(0);
@@ -143,6 +144,15 @@ public class HealthCare implements Executor {
 			}
 		});
 
+        // Content directory; defaults to 'small' w/in resources directory
+		myCallBacks.put("cd", new CallBack() {
+			@Override
+			public void handle(String[] values) {
+				contentSubDir = values[0];
+			}
+
+		});
+
 		// custom command line callback for hospital data file
 		myCallBacks.put("fh", hospitalCB);
 
@@ -239,9 +249,8 @@ public class HealthCare implements Executor {
                 };
                 int recordTypeIdx = rnd.nextInt(recordTypes.length);
                 // Resource directory based content file
-                String recordFileSize = "small";
                 String recordFile =
-                    "/content/"+recordFileSize+"/"+recordFiles[recordTypeIdx];
+                    "/content/"+contentSubDir+"/"+recordFiles[recordTypeIdx];
                 InputStream recordFileIS =
                     HealthCare.class.getResourceAsStream(recordFile);
                 DataInputStream recordFileDIS =
@@ -254,6 +263,7 @@ public class HealthCare implements Executor {
                 BasicDBObject recordDoc = new BasicDBObject()
                     .append("_id", recordId)
                     .append("type", recordTypes[recordTypeIdx])
+                    .append("size", recordFileLength)
                     .append("content", recordFileData)
                     ;
                 intRecordBuild.mark();
