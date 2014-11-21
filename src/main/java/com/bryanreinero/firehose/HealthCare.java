@@ -71,7 +71,6 @@ public class HealthCare implements Executor {
         public void handle(String[] values) {
             filename  = values[0];
             try {
-                System.out.println("dmf:filenm:"+filename);
                 InputStream is =
                     HealthCare.class.getResourceAsStream(filename);
                 BufferedReader br = null;
