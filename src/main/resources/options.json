@@ -77,6 +77,14 @@
                 "separator": ","
             },
             {
+                "op": "db",
+                "longOpt" : "dbname",
+                "name": "dbname",
+                "description":"database name (w/o collection)",
+                "required": false,
+                "args" : 1
+            },
+            {
                 "op": "wc",
                 "longOpt" : "writeConcern",
                 "name": "concern",
