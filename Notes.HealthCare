@@ -1,6 +1,10 @@
   
   Health Care Demo
   
+  To Do
+    - update samples final summary output to show summary totals from metrics
+      total time spent in insert, update, query, build, etc
+  
   Data
     Hospitals, Physicians, Patients, Procedures, Records
   
@@ -93,14 +97,14 @@
       hcd_counts()
     find patients with multiple procedures
       hcd_multi_procs()
-      hcd.patients.find({ "procedures.1" : {$exists: true}},{first:1,last:1});
+        hcd.patients.find({ "procedures.1" : {$exists: true}},{first:1,last:1});
     find hospital by city, state, phy_id
       hcd_hospitals_count_by_state()
-      hcd.hospitals.aggregate([ {$group: {_id:"$state", count:{$sum:1}}}, {$sort: {count:1}}]);
+        hcd.hospitals.aggregate([ {$group: {_id:"$state", count:{$sum:1}}}, {$sort: {count:1}}]);
       hcd_hospitals_count_by_city()
-      hcd.hospitals.aggregate([ {$group: {_id:"$city", count:{$sum:1}}}, {$sort: {_id:1}}]);
+        hcd.hospitals.aggregate([ {$group: {_id:"$city", count:{$sum:1}}}, {$sort: {_id:1}}]);
       hospitals_by_physician(phy_id)
-      hcd.hospitals.find({physicians:{$in:[phy_id]}},{_id:0,name:1});
+        hcd.hospitals.find({physicians:{$in:[phy_id]}},{_id:0,name:1});
     find physician by city, state, hospital, procedure, record
       hcd.physicians.find({"addr.city":"Warwick"},{"addr.city":1,"addr.state":1})
       hcd.physicians.find({"addr.state":"NY"},{"addr.city":1,"addr.state":1})
