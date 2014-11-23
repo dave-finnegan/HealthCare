@@ -2,6 +2,14 @@
     "HealthCare": {
         "options": [
             {
+                "op": "db",
+                "longOpt" : "dbname",
+                "name": "dbname",
+                "description":"database name",
+                "required": false,
+                "args" : 1
+            },
+            {
                 "op": "c",
                 "longOpt" : "count",
                 "name": "count",
@@ -70,19 +78,11 @@
                 "longOpt" : "verbose",
                 "name": "verbose",
                 "description": "Enabel verbose output",
-                "args": "0"
             }
         ]
     },
     "ApplicationFramework" : {
         "options": [
-            {
-                "op": "t",
-                "longOpt" : "threads",
-                "name": "number",
-                "description": "number of worker threads. Default 1",
-                args: 1
-            },
             {
                 "op": "m",
                 "longOpt" : "mongos",
@@ -92,12 +92,11 @@
                 "separator": ","
             },
             {
-                "op": "db",
-                "longOpt" : "dbname",
-                "name": "dbname",
-                "description":"database name (w/o collection)",
-                "required": false,
-                "args" : 1
+                "op": "t",
+                "longOpt" : "threads",
+                "name": "number",
+                "description": "number of worker threads. Default 1",
+                "args": 1
             },
             {
                 "op": "wc",
@@ -119,18 +118,25 @@
                 "description": "enable write concern wait for page flush"
             },
             {
+                "op": "v",
+                "longOpt" : "verbose",
+                "name": "verbose",
+                "description": "Enabel verbose output",
+                "args": 1
+            },
+            {
                 "op": "pi",
                 "longOpt" : "printInterval",
                 "name": "interval",
                 "description": "print output every n seconds",
-                "args": "1"
+                "args": 1
             },
             {
                 "op": "ri",
                 "longOpt" : "reportInterval",
                 "name": "interval",
                 "description": "average stats over an time interval of i milleseconds",
-                "args": "1"
+                "args": 1
             },
             {
                 "op": "cr",
@@ -139,11 +145,10 @@
                 "description": "print out in CR-delimited lines. Default is console mode pretty printing, when possible"
             },
             {
-                "op": "v",
-                "longOpt" : "verbose",
-                "name": "verbose",
-                "description": "Enabel verbose output",
-                "args": "1"
+            	"op": "b",
+            	"longOpt": "batch",
+            	"args": 1,
+            	"description": "Bulk write in batches of n"
             }
         ]
     }
