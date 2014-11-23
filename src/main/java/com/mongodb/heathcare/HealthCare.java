@@ -1,6 +1,5 @@
 package com.mongodb.healthcare;
 
-import com.bryanreinero.firehose.Firehose;
 import com.bryanreinero.firehose.Converter;
 import com.bryanreinero.firehose.Transformer;
 import com.bryanreinero.firehose.cli.CallBack;
