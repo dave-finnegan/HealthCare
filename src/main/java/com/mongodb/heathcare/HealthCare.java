@@ -68,7 +68,7 @@ public class HealthCare implements Executor {
 	private DAO daoRecords = null;
     private DAO daoContent = null;
 	
-	private Boolean verbose = false;
+	private static Boolean verbose = false;
 	private String filename = null;
 	
     class HealthCareCallBack implements CallBack {
