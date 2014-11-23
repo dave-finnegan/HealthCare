@@ -2,9 +2,30 @@
   Health Care Demo
   
   To Do
+    - create data and content file handle'r wrapper
+      HealthCareDataFileCB(String[] values)
+        HealthCareCallBack (String type, String[] values)
+      rename HealthCareCallBack to HealthCareDataFileHandler
+      HealthCareDataFileHandler (String type, String[] values)
+        if (type.equals("filesystem"))
+          do filesystem file access
+        else if (type.equals("resource"))
+          do resource file access
+    - turn firehose into a jar library interface
+    - thread count
+      20 threads per client
+    - perf
+      disk - iostat
+      mongodb - mongostat
+      client 
+    - thread
+      use a thread.interrupt
+      catch, cleanup
     - how to 'properly' exit from threads
       I'm getting exceptions as one thread "finishes" all the work and then
         stops all the other threads - some of which are still working!
+      do I need to set a flag of some sort
+      then how to I stop just one thread?
     - update samples final summary output to show summary totals from metrics
       total time spent in insert, update, query, build, etc
     - command line handling
