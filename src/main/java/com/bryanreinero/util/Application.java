@@ -45,6 +45,7 @@ public class Application {
 				Application w = new Application(executor);
 				
 				w.cli.addOptions(name);
+
 				//add custom callbacks
 				for ( Entry<String, CallBack> e : cbs.entrySet() )
 					w.cli.addCallBack(e.getKey(), e.getValue());
@@ -136,6 +137,8 @@ public class Application {
 		// prep the CLI with a set of 
 		// standard CL option handlers
 		cli = new CommandLineInterface();
+
+        // Add ApplicationFramework options
 		cli.addOptions(appName);
 
         // Threads
