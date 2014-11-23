@@ -64,6 +64,13 @@
                 "description":"filename to import last name data from",
                 "required": false,
                 "args" : 1
+            },
+            {
+                "op": "v",
+                "longOpt" : "verbose",
+                "name": "verbose",
+                "description": "Enabel verbose output",
+                "args": "0"
             }
         ]
     },

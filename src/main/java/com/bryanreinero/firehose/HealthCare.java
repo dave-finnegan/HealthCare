@@ -69,19 +69,18 @@ public class HealthCare implements Executor {
         private Integer linesRead = 0;
         public List<DBObject> DBObjects = null;
         
-        public void handle(String[] values) {
+        public void dataFileHandler(String type, String[] values) {
             filename  = values[0];
             try {
-                InputStream is =
-                    HealthCare.class.getResourceAsStream(filename);
                 BufferedReader br = null;
-                if (is != null)
-                    // try resource file first
+                if (type.equals("resource")) {
+                    InputStream is =
+                        HealthCare.class.getResourceAsStream(filename);
                     br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-                else
-                    // try user specified filename
+                } else if (type.equals("filesystem")) {
                     br = new BufferedReader(new FileReader(filename));
-                //br = new BufferedReader(new FileReader(filename));
+                }
+
                 DBObjects = new ArrayList<DBObject>();
                 
                 // read header line from file
@@ -110,25 +109,35 @@ public class HealthCare implements Executor {
                         DBObjects.add(object);
                     }
                 } catch (IOException e) {
-                    System.out.println("Caught exception in HealthCareCallBack:"
+                    System.out.println("Caught exception in HealthCareCallBack: "
                                        +e.getMessage());
-                    e.printStackTrace();
+                    if (verbose)
+                        e.printStackTrace();
                     try {
                         synchronized ( br ) {
                             if (br != null) br.close();
                         }
                     } catch (IOException ex) {
-                        ex.printStackTrace();
+                        System.out.println
+                            ("Caught exception in HealthCareCallBack: "
+                             +e.getMessage());
+                        if (verbose)
+                            ex.printStackTrace();
                     }
                 }
                 br.close();
                 br = null;
             } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("Exiting from HealthCare callback: "
+                System.out.println("Caught excepting in HealthCareCallback: "
                                    +e.getMessage());
+                if (verbose)
+                    e.printStackTrace();
                 System.exit(-1);
             }
+        }
+
+        public void handle(String[] values) {
+            dataFileHandler ("filesystem", values);
         }
     }
     
@@ -153,6 +162,14 @@ public class HealthCare implements Executor {
 
 		});
 
+        // Verbose
+		myCallBacks.put("v", new CallBack() {
+			@Override
+			public void handle(String[] values) {
+				verbose = true;
+			}
+		});
+
 		// custom command line callback for hospital data file
 		myCallBacks.put("fh", hospitalCB);
 
@@ -175,17 +192,23 @@ public class HealthCare implements Executor {
             (appName, this, args, myCallBacks);
 
         if (hospitalCB.DBObjects == null)
-            hospitalCB.handle(new String[] {"/data/hospitals.dat"});
+            hospitalCB.dataFileHandler
+                ("resource", new String[] {"/data/hospitals.dat"});
         if (proceduresCB.DBObjects == null)
-            proceduresCB.handle(new String[] {"/data/procedures.dat"});
+            proceduresCB.dataFileHandler
+                ("resource", new String[] {"/data/procedures.dat"});
         if (cityCB.DBObjects == null)
-            cityCB.handle(new String[] {"/data/city.dat"});
+            cityCB.dataFileHandler
+                ("resource", new String[] {"/data/city.dat"});
         if (streetsCB.DBObjects == null)
-            streetsCB.handle(new String[] {"/data/streets.dat"});
+            streetsCB.dataFileHandler
+                ("resource", new String[] {"/data/streets.dat"});
         if (lastCB.DBObjects == null)
-            lastCB.handle(new String[] {"/data/last.dat"});
+            lastCB.dataFileHandler
+                ("resource", new String[] {"/data/last.dat"});
         if (firstCB.DBObjects == null)
-            firstCB.handle(new String[] {"/data/first.dat"});
+            firstCB.dataFileHandler
+                ("resource", new String[] {"/data/first.dat"});
 
 		samples = worker.getSampleSet();
         daoHospitals = worker.getDAO("hospitals");
@@ -489,9 +512,7 @@ public class HealthCare implements Executor {
 		buf.append(String.format(", samples: "+ samples ));
 		
 		if( verbose ) {
-			buf.append(", converter: "+converter);
 			buf.append(", dao: "+daoPatients);
-			buf.append(", source: "+filename);
 		}
 		buf.append(" }");
 		return buf.toString();
