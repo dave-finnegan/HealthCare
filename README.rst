@@ -91,7 +91,7 @@ Example run
 
 ::
 
- java -jar target/HealthCare-0.1.1.one-jar.jar -t 12 -c 1000
+ java -jar target/HealthCare-0.1.1.one-jar.jar --threads 12 --count 1000
 
 Dependencies
 ------------
