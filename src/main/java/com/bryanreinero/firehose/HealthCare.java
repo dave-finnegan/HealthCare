@@ -202,21 +202,15 @@ public class HealthCare implements Executor {
     @Override
     public void execute() {
 
-        // dmf: To Do
-        // - copy full data files into resources/data dir
-
         try {
 
             Integer currentCount = count.incrementAndGet();
 
             Interval intTotal = samples.set("Total");
             if (currentCount > maxCount) {
-                Thread.sleep(1000);
                 worker.stop();
-                System.out.println("Exiting from execute after stopping work.");
-                System.exit(0);
 
-            } else  {
+            } else {
 
                 Random rnd = new Random();
 
@@ -475,15 +469,10 @@ public class HealthCare implements Executor {
             }
             intTotal.mark();
 
-        } catch (InterruptedException e) {
-            //System.out.println("Caught exception in execute:"+e.getMessage());
-            System.out.println("Exiting from execute after catching exception: "
-                               +e.getMessage());
-            System.exit(0);
         } catch (Exception e) {
             System.out.println("Caught exception in execute:"+e.getMessage());
             e.printStackTrace();
-            //worker.stop();
+            worker.stop();
         }
     }
 	
@@ -516,7 +505,7 @@ public class HealthCare implements Executor {
 		catch (Exception e) {
             System.out.println("Caught exception in main:"+e.getMessage());
 			e.printStackTrace();
-            System.out.println("Exiting from main after.");
+            System.out.println("Exiting from main.");
 			System.exit(-1);
 		}
     }
