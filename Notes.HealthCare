@@ -2,7 +2,27 @@
   Health Care Demo
   
   To Do
+    - wc 1 fails, but has the same dao output as w/o???
+    - wc 1 is not working against a stand-alone mongod
+    - journal and sync are not working
+    - why are there options.json files in both src/java and resources
+    - update firehose with my mods
+      getDao now takes an argument, etc
+      will need to pull back old code from git;that I just deleted
+    - modify HealthCare to rely upon Firehose.jar; drop all firehose files
     - turn firehose into a jar library interface
+      remove Firehose.java, test/RandomDSVGenerator.java
+      modify options.json
+        change "Firehose": {
+        to "<your app here>": {
+        drop RandomDSVGenerator
+        enable "mvn install" to copy jar to .m2 hiearchy
+        pull mainclass reference from pom.xml
+      create FirehoseLoader
+        ./src/main/java/com/bryanreinero/firehose/Firehose.java
+        ./src/main/java/com/bryanreinero/firehose/test/RandomDSVGenerator.java
+        ./src/main/resources/options.json
+        add Firehose*.jar to pom.xml so it gets pulled from .m2 hiearchy
   
   Data
     Hospitals, Physicians, Patients, Procedures, Records
