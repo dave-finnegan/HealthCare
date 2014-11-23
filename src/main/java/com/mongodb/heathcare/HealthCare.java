@@ -3,13 +3,15 @@ package com.mongodb.healthcare;
 import com.bryanreinero.firehose.Firehose;
 import com.bryanreinero.firehose.Converter;
 import com.bryanreinero.firehose.Transformer;
+import com.bryanreinero.firehose.cli.CallBack;
+import com.bryanreinero.firehose.metrics.Interval;
+import com.bryanreinero.firehose.metrics.SampleSet;
+
 import com.bryanreinero.util.Application;
+import com.bryanreinero.util.WorkerPool.Executor;
 import com.bryanreinero.util.WorkerPool;
 import com.bryanreinero.util.DAO;
 import com.bryanreinero.util.Printer;
-import com.bryanreinero.firehose.cli.CommandLineInterface;
-import com.bryanreinero.firehose.cli.CallBack;
-import com.bryanreinero.firehose.cli.OptionFactory;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -19,18 +21,14 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.bryanreinero.firehose.cli.CallBack;
-import com.bryanreinero.firehose.metrics.Interval;
-import com.bryanreinero.firehose.metrics.SampleSet;
-import com.bryanreinero.util.DAO;
-import com.bryanreinero.util.Application;
-import com.bryanreinero.util.WorkerPool.Executor;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.WriteResult;
@@ -556,7 +554,8 @@ public class HealthCare implements Executor {
 		} 
 		catch (Exception e) {
             System.out.println("Caught exception in main:"+e.getMessage());
-			e.printStackTrace();
+            if (verbose)
+                e.printStackTrace();
             System.out.println("Exiting from main.");
 			System.exit(-1);
 		}
