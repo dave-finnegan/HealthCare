@@ -7,7 +7,7 @@
 	<packaging>jar</packaging>
 	<version>1.0.0</version>
 	<name>HealthCare</name>
-	<url>http://bryanreinero.com</url>
+	<url>http://mongodb.com</url>
 	<dependencies>
     <dependency>
 			<groupId>com.bryanreinero.firehose</groupId>
