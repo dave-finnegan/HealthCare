@@ -44,7 +44,7 @@ public class HealthCare implements Executor {
     private String dbname = "hcd";
     private Boolean dbPerCol = false;
     private Boolean ix = false;
-    private Integer maxCount = 0;
+    private Integer maxCount = 1;
     private String contentSubDir = "small";
 	private AtomicInteger count = new AtomicInteger(0);
 
