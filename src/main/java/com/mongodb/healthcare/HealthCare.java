@@ -42,6 +42,8 @@ public class HealthCare implements Executor {
 	private final SampleSet samples;
 
     private String dbname = "hcd";
+    private Boolean dbPerCol = false;
+    private Boolean ix = false;
     private Integer maxCount = 0;
     private String contentSubDir = "small";
 	private AtomicInteger count = new AtomicInteger(0);
@@ -92,11 +94,17 @@ public class HealthCare implements Executor {
 
                 DBObjects = new ArrayList<DBObject>();
                 
-                // read header line from file
+                // read delimeter line from file
+                // 2 chars: field delim and field seperator
+                // e.g. :, for a header like: field1:type1,field2:type2
                 String ln = br.readLine();
-                String colDelim = ln.substring(0,1);
-                String fieldDelim = ln.substring(1,2);
-                String header = ln.substring(2);
+                String fieldDelim = ln.substring(0,1);
+                String colDelim = ln.substring(1,2);
+                // read header line from file
+                // field name and type specifiers
+                // e.g. field1:type1,field2:type2
+                // using field and type delimeter and seperators defined above
+                String header = br.readLine();
                 converter.setDelimiter( colDelim.charAt(0) );
                 for (String column : header.split(colDelim)) {
                     String[] s = column.split(fieldDelim);
@@ -162,6 +170,14 @@ public class HealthCare implements Executor {
 			}
 		});
 
+		// DB per Collection
+		myCallBacks.put("dbpercol", new CallBack() {
+			@Override
+			public void handle(String[] values) {
+                dbPerCol = true;
+			}
+		});
+
 		// custom command line callback for count
 		myCallBacks.put("c", new CallBack() {
 			@Override
@@ -177,6 +193,14 @@ public class HealthCare implements Executor {
 				contentSubDir = values[0];
 			}
 
+		});
+
+		// Insert Only; skip procedure, patient, physician, hospital updates
+		myCallBacks.put("ix", new CallBack() {
+			@Override
+			public void handle(String[] values) {
+                ix = true;
+			}
 		});
 
         // Verbose
@@ -228,19 +252,26 @@ public class HealthCare implements Executor {
                 ("resource", new String[] {"/data/first.dat"});
 
 		samples = worker.getSampleSet();
-        daoHospitals = worker.getDAO(dbname, "hospitals");
-        daoPhysicians = worker.getDAO(dbname, "physicians");
-        daoPatients = worker.getDAO(dbname, "patients");
-        daoProcedures = worker.getDAO(dbname, "procedures");
+        daoHospitals = worker.getDAO
+            ( dbPerCol ? dbname+"_hospitals":dbname, "hospitals");
+        daoPhysicians = worker.getDAO
+            ( dbPerCol ? dbname+"_physicians":dbname, "physicians");
+        daoPatients = worker.getDAO
+            ( dbPerCol ? dbname+"_patients":dbname, "patients");
+        daoProcedures = worker.getDAO
+            ( dbPerCol ? dbname+"_procedures":dbname, "procedures");
         BasicDBObject proceduresIndex = new BasicDBObject()
+            //.append("ns",dbname+".procedures")
             .append("hospital", 1)
             .append("physician", 1)
             .append("patient", 1)
             .append("type", 1)
             ;
         daoProcedures.createIndex(proceduresIndex);
-        daoRecords = worker.getDAO(dbname, "records");
-        daoContent = worker.getDAO(dbname, "content");
+        daoRecords = worker.getDAO 
+            ( dbPerCol ? dbname+"_records":dbname, "records");
+        daoContent = worker.getDAO
+            ( dbPerCol ? dbname+"_content":dbname, "content");
 		worker.addPrintable(this);
 		worker.start();
 
@@ -273,8 +304,8 @@ public class HealthCare implements Executor {
                 ObjectId recordId = ObjectId.get();
 
                 // Record
-                Interval intRecordTotal = samples.set("RecordTotal");
-                Interval intRecordBuild = samples.set("RecordBuild");
+                //Interval intRecordTotal = samples.set("RecordTotal");
+                //Interval intRecordBuild = samples.set("RecordBuild");
                 String[] recordTypes = {
                     "txt",   "txt",   "txt",   "txt", // 40% txt (1k)
                     "jpg", "jpg",                     // 20% jpg (200k)
@@ -290,13 +321,13 @@ public class HealthCare implements Executor {
                     "data-13M.pdf"
                 };
                 int recordTypeIdx = rnd.nextInt(recordTypes.length);
-                // Resource directory based content file
                 byte[] recordFileData = null;
                 int recordFileLength = 0;
                 if (contentSubDir.equals("tiny")) {
                     recordFileData = new byte[2];
                     recordFileLength = 1;
                 } else {
+                    // Resource directory based content file
                     String recordFile =
                         "/content/"+contentSubDir+"/"+recordFiles[recordTypeIdx];
                     InputStream recordFileIS =
@@ -316,23 +347,28 @@ public class HealthCare implements Executor {
                     .append("content", recordFileData)
                     .append("procedure", procedureId)
                     ;
-                intRecordBuild.mark();
+                //intRecordBuild.mark();
                 WriteResult recordResult = null;
                 try {
-                    Interval intRecordInsert = samples.set("RecordInsert");
+                    Interval intInsert = samples.set("Insert");
+                    //Interval intRecordInsert = samples.set("RecordInsert");
                     recordResult = daoRecords.insert (recordDoc);
-                    intRecordInsert.mark();
+                    //intRecordInsert.mark();
+                    intInsert.mark();
                     countRecords.incrementAndGet();
                 } catch (Exception e) {
                     System.out.println ("Caught exception in RecordInsert: "
                                         +e.getMessage());
                     System.out.println ("record: "+recordDoc);
                 }
-                intRecordTotal.mark();
+                //intRecordTotal.mark();
+
+                // Option: skip procedure, patient, physician, hospital updates
+                if (!ix) {
 
                 // Procedure
-                Interval intProcedureTotal = samples.set("ProcedureTotal");
-                Interval intProcedureBuild = samples.set("ProcedureBuild");
+                //Interval intProcedureTotal = samples.set("ProcedureTotal");
+                //Interval intProcedureBuild = samples.set("ProcedureBuild");
                 String procedureType =
                     (String)proceduresCB.DBObjects.get(procedureIdx).get("name");
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
@@ -351,25 +387,27 @@ public class HealthCare implements Executor {
                     .append("$setOnInsert", procedureQuery)
                     .append("$addToSet", new BasicDBObject("records", recordId))
                     ;
-                intProcedureBuild.mark();
+                //intProcedureBuild.mark();
                 WriteResult procedureResult = null;
                 try {
-                    Interval intProcedureInsert = samples.set("ProcedureInsert");
+                    Interval intUpdate = samples.set("Update");
+                    //Interval intProcedureUpdate = samples.set("ProcedureUpdate");
                     procedureResult =
                         daoProcedures.update (procedureQuery, procedureDoc,
                                               true, false);
-                    intProcedureInsert.mark();
+                    intUpdate.mark();
+                    //intProcedureUpdate.mark();
                     countProcedures.incrementAndGet();
                 } catch (Exception e) {
                     System.out.println ("Caught exception in ProcedureUpdate: "
                                         +e.getMessage());
                     System.out.println ("procedure: "+procedureDoc);
                 }
-                intProcedureTotal.mark();
+                //intProcedureTotal.mark();
 
                 // Patient
-                Interval intPatientTotal = samples.set("PatientTotal");
-                Interval intPatientBuild = samples.set("PatientBuild");
+                //Interval intPatientTotal = samples.set("PatientTotal");
+                //Interval intPatientBuild = samples.set("PatientBuild");
                 String patientFirst = (String)firstCB.DBObjects.get
                     (rnd.nextInt(firstCB.linesRead)).get("name");
                 String patientLast = (String)lastCB.DBObjects.get
@@ -408,25 +446,27 @@ public class HealthCare implements Executor {
                     .append("$setOnInsert", patientDocFields)
                     .append("$addToSet", patientDocPush)
                     ;
-                intPatientBuild.mark();
+                //intPatientBuild.mark();
                 WriteResult patientResult = null;
                 try {
-                    Interval intPatientUpdate = samples.set("PatientUpdate");
+                    Interval intUpdate = samples.set("Update");
+                    //Interval intPatientUpdate = samples.set("PatientUpdate");
                     patientResult =
                         daoPatients.update (patientQuery, patientDoc,
                                             true, false);
-                    intPatientUpdate.mark();
+                    //intPatientUpdate.mark();
+                    intUpdate.mark();
                     countPatients.incrementAndGet();
                 } catch (Exception e) {
                     System.out.println ("Caught exception in PatientUpdate: "
                                         +e.getMessage());
                     System.out.println ("patient: "+patientDoc);
                 }
-                intPatientTotal.mark();
+                //intPatientTotal.mark();
 
                 // Physician
-                Interval intPhysicianTotal = samples.set("PhysicianTotal");
-                Interval intPhysicianBuild = samples.set("PhysicianBuild");
+                //Interval intPhysicianTotal = samples.set("PhysicianTotal");
+                //Interval intPhysicianBuild = samples.set("PhysicianBuild");
                 String physicianFirst = (String)firstCB.DBObjects.get
                     (rnd.nextInt(firstCB.linesRead)).get("name");
                 String physicianLast = (String)lastCB.DBObjects.get
@@ -462,25 +502,27 @@ public class HealthCare implements Executor {
                     .append("$addToSet", new BasicDBObject
                             ("hospitals", hospitalId))
                     ;
-                intPhysicianBuild.mark();
+                //intPhysicianBuild.mark();
                 WriteResult physicianResult = null;
                 try {
-                    Interval intPhysicianUpdate = samples.set("PhysicianUpdate");
+                    Interval intUpdate = samples.set("Update");
+                    //Interval intPhysicianUpdate = samples.set("PhysicianUpdate");
                     physicianResult =
                         daoPhysicians.update (physicianQuery, physicianDoc,
                                             true, false);
-                    intPhysicianUpdate.mark();
+                    //intPhysicianUpdate.mark();
+                    intUpdate.mark();
                     countPhysicians.incrementAndGet();
                 } catch (Exception e) {
                     System.out.println ("Caught exception in PhysicianUpdate: "
                                         +e.getMessage());
                     System.out.println ("physician: "+physicianDoc);
                 }
-                intPhysicianTotal.mark();
+                //intPhysicianTotal.mark();
 
                 // Hospital
-                Interval intHospitalTotal = samples.set("HospitalTotal");
-                Interval intHospitalBuild = samples.set("HospitalBuild");
+                //Interval intHospitalTotal = samples.set("HospitalTotal");
+                //Interval intHospitalBuild = samples.set("HospitalBuild");
                 int hospitalIdx = rnd.nextInt(hospitalCB.linesRead);
                 String hospitalName = (String)hospitalCB.DBObjects.get
                     (hospitalIdx).get("name");
@@ -507,21 +549,25 @@ public class HealthCare implements Executor {
                     .append("$addToSet", new BasicDBObject
                             ("physicians", physicianId))
                     ;
-                intHospitalBuild.mark();
+                //intHospitalBuild.mark();
                 WriteResult hospitalResult = null;
                 try {
-                    Interval intHospitalUpdate = samples.set("HospitalUpdate");
+                    Interval intUpdate = samples.set("Update");
+                    //Interval intHospitalUpdate = samples.set("HospitalUpdate");
                     hospitalResult =
                         daoHospitals.update (hospitalQuery, hospitalDoc,
                                             true, false);
-                    intHospitalUpdate.mark();
+                    //intHospitalUpdate.mark();
+                    intUpdate.mark();
                     countHospitals.incrementAndGet();
                 } catch (Exception e) {
                     System.out.println ("Caught exception in HospitalUpdate: "
                                         +e.getMessage());
                     System.out.println ("hospital: "+hospitalDoc);
                 }
-                intHospitalTotal.mark();
+                //intHospitalTotal.mark();
+
+                }
 
             }
             intTotal.mark();
@@ -536,13 +582,17 @@ public class HealthCare implements Executor {
 	@Override 
 	public String toString() {
 		StringBuffer buf = new StringBuffer("{ ");
-		buf.append(String.format("threads: "+worker.getNumThreads()));
-		buf.append(String.format(", count: "+this.count ));
-		buf.append(String.format(", countHospitals: "+this.countHospitals ));
-		buf.append(String.format(", countPhysicians: "+this.countPhysicians ));
-		buf.append(String.format(", countPatients: "+this.countPatients ));
-		buf.append(String.format(", countProcedures: "+this.countProcedures ));
-		buf.append(String.format(", countRecords: "+this.countRecords ));
+        if (verbose) {
+            buf.append(String.format("threads: "+worker.getNumThreads()+", "));
+        }
+		buf.append(String.format("count: "+this.count ));
+        if (verbose) {
+            buf.append(String.format(", countHospitals: "+this.countHospitals ));
+            buf.append(String.format(", countPhysicians: "+this.countPhysicians ));
+            buf.append(String.format(", countPatients: "+this.countPatients ));
+            buf.append(String.format(", countProcedures: "+this.countProcedures ));
+            buf.append(String.format(", countRecords: "+this.countRecords ));
+        }
 		buf.append(String.format(", samples: "+ samples ));
 		
 		if( verbose ) {

@@ -5,9 +5,15 @@
                 "op": "db",
                 "longOpt" : "dbname",
                 "name": "dbname",
-                "description":"database name",
+                "description":"database name; default 'hcd'",
                 "required": false,
                 "args" : 1
+            },
+            {
+                "op": "dbpercol",
+                "longOpt" : "dbpercol",
+                "name": "DB per Collection",
+                "description": "Use a seperate DB per collection",
             },
             {
                 "op": "c",
@@ -74,6 +80,12 @@
                 "args" : 1
             },
             {
+                "op": "ix",
+                "longOpt" : "insert_only",
+                "name": "insert only",
+                "description": "Skip procedure, patient, physician, hospital updates",
+            },
+            {
                 "op": "v",
                 "longOpt" : "verbose",
                 "name": "verbose",
@@ -84,12 +96,19 @@
     "ApplicationFramework" : {
         "options": [
             {
-                "op": "m",
+                "op": "h",
                 "longOpt" : "mongos",
                 "name": "hostname:port",
                 "description": "',' delimited list of mongodb host to connect to. Default localhost:27017,",
                 "args": "multi",
                 "separator": ","
+            },
+            {
+                "op": "up",
+                "longOpt" : "usrpwd",
+                "name": "usr:pwd",
+                "description": "username and password; must specify mongo",
+                "args": 1
             },
             {
                 "op": "t",
