@@ -2,6 +2,14 @@
     "HealthCare": {
         "options": [
             {
+                "op": "c",
+                "longOpt" : "count",
+                "name": "count",
+                "description":"Number of records to insert; default 1",
+                "required": false,
+                "args" : 1
+            },
+            {
                 "op": "db",
                 "longOpt" : "dbname",
                 "name": "dbname",
@@ -14,14 +22,6 @@
                 "longOpt" : "dbpercol",
                 "name": "DB per Collection",
                 "description": "Use a seperate DB per collection",
-            },
-            {
-                "op": "c",
-                "longOpt" : "count",
-                "name": "count",
-                "description":"number of records to insert",
-                "required": true,
-                "args" : 1
             },
             {
                 "op": "cd",
@@ -97,9 +97,9 @@
         "options": [
             {
                 "op": "h",
-                "longOpt" : "mongos",
+                "longOpt" : "hosts",
                 "name": "hostname:port",
-                "description": "',' delimited list of mongodb host to connect to. Default localhost:27017,",
+                "description": "mongodb host, or ',' delimited list of mongos hosts to connect to. Default localhost:27017,",
                 "args": "multi",
                 "separator": ","
             },
@@ -107,7 +107,7 @@
                 "op": "up",
                 "longOpt" : "usrpwd",
                 "name": "usr:pwd",
-                "description": "username and password; must specify mongo",
+                "description": "username and password; must specify host(s)",
                 "args": 1
             },
             {
