@@ -2,7 +2,14 @@
   Health Care Demo
   
   To Do
+    - help needs to show required fields
+    - change samples to display only at end of each insert/update run
+      rather than randomly in code after each second
+      most times getting non-transactional output
+    - WiredTiger - try LSM instead of standard BTree
+      may help with heavy update performance
     - add header to DSVGenerator and DSVLoader files
+    - add support for gridfs
   
   Data
     Hospitals, Physicians, Patients, Procedures, Records
