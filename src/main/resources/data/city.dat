@@ -1,4 +1,5 @@
-,:city:string,state:string,zip:int
+:,
+city:string,state:string,zip:int
 Aaron,GA,30450
 Aber Prov Grd,MD,21010
 Aberdeen,ID,83210
