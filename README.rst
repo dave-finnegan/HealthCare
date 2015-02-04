@@ -10,7 +10,7 @@ Overview
 
 Healthcare patient records data is hiearchical in nature.  Hospitals relate to physicians, physicians to patients, patients to procedures, and procedures to patient records.  Inter-relationships are useful for satisfying various queries of the data set.
 
-The data is randomly generated with input from lists of raw data gleaned from the internet for hospital name, procedure name, street, city, state, zip, and first and last name values.
+The data is randomly generated with input from lists of raw data gleaned from the Internet for hospital name, procedure name, street, city, state, zip, and first and last name values.
 
 The application takes a number of command line switches to make possible a variety of different load conditions.  The default behaviour is to create (insert) a single patient record document, followed by updates, or upserts, to each of the related procedure, patient, physician, and hospital documents.  The schema for these docs is listed below.
 
@@ -19,11 +19,11 @@ Options
 
 Options exist to change the load charateristics in the following ways:
 
-    - <b>Insert only:</b> Create only the patient record document which drives an insert only work load (-ix command line switch)
-    - <b>Large/Small/Tiny:</b> Create patient record content of varying size to simulate docs/sec or MB/sec work loads (-cd large|small|tiny)
-    - <b>DB per Collection:</b> Create a seperate DB for each of the five collections allowing for write lock load testing (-dbpercol)
-    - <b>Thread count:</b> Specify number of threads per application client (-t <cnt>)
-    - <b>Write Concern, journal, fsync:</b> Specify write options (-wc, -wj, -ws)
+  - Insert only: Create only the patient record document which drives an insert only work load (-ix command line switch)
+  - Large/Small/Tiny: Create patient record content of varying size to simulate docs/sec or MB/sec work loads (-cd large|small|tiny)
+  - DB per Collection: Create a seperate DB for each of the five collections allowing for write lock load testing (-dbpercol)
+  - Thread count: Specify number of threads per application client (-t <cnt>)
+  - Write Concern, journal, fsync: Specify write options (-wc, -wj, -ws)
 
 Schema
 ======
@@ -96,7 +96,7 @@ Usage
    * - -c
      - --count
      - integer
-     - number of records to insert
+     - number of records to insert (required)
    * - -cr
      - --noPretty
      -        
@@ -185,7 +185,7 @@ Preliminary testing shows throughput rates for a 3-node replica set running on m
 
 .. list-table::
    :header-rows: 1
-   :widths: 10,25,20,90
+   :widths: 10,25,90
 
    * - **Version**
      - **Switches**
@@ -215,7 +215,7 @@ Firehose thread-pool framework
 
 This HealthCare application is built upon the Firehose thread-pool framework created by Bryan Reinero (reference below).
 
-The process of creating an application upon the Firehose framework requires the creation of an Executor class (see HealthCare.java), and an options.json file to define the application's command line arguments.  Another example of an application built upon the Firehose framework is the `DSVLoader <https://github.com/dave-finnegan/DSVLoader>>`_ which is a delimiter separated value file import loader for MongoDB servers.
+The process of creating an application upon the Firehose framework requires the creation of an Executor class (see HealthCare.java), and an options.json file to define the application's command line arguments.  Another example of an application built upon the Firehose framework is the `DSVLoader <https://github.com/dave-finnegan/DSVLoader>`_ which is a delimiter separated value file import loader for MongoDB servers.
 
 Dependencies
 ------------
