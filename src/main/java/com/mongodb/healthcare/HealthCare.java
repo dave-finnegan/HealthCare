@@ -382,6 +382,7 @@ public class HealthCare implements Executor {
                     .append("physician", physicianId)
                     .append("patient", patientId)
                     .append("type", procedureType)
+                    .append("date", procedureDate)
                     ;
                 BasicDBObject procedureDoc = new BasicDBObject()
                     .append("$setOnInsert", procedureQuery)
