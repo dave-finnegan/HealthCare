@@ -185,16 +185,11 @@ Preliminary testing shows throughput rates for a 3-node replica set running on m
 
 .. list-table::
    :header-rows: 1
-   :widths: 10,25,20,90
+   :widths: 20,35,30
 
-   * - **option**
-     - **long form**
-     - **type**
-     - **description**
-   * - -c
-     - --count
-     - integer
-     - number of records to insert (required)
+   * - **Version**
+     - **Switches**
+     - **Throughput**
 
 
 Firehose thread-pool framework
