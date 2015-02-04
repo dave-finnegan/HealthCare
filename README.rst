@@ -181,8 +181,6 @@ Deployment of this HealthCare application requires the existence of a MongoDB se
 Metrics
 -------
 
-Preliminary testing shows throughput rates for a 3-node replica set running on m3.xlarge instances as follows:
-
 .. list-table::
    :header-rows: 1
    :widths: 20,35,30
