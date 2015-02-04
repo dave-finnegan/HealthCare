@@ -178,6 +178,38 @@ Deployment
 
 Deployment of this HealthCare application requires the existence of a MongoDB server, replica set, or sharded cluster.  Typical environments can be deployed on local nodes, from an MMS account, or through the AWS EC2 environment.  If this tool is to be used for benchmarking it is recommended that a minimum of a 3-node replica set be deployed with m3.xlarge AWS instances, along with at least one client node for driving load from the HealthCare application.
 
+Metrics
+-------
+
+Preliminary testing shows throughput rates for a 3-node replica set running on m3.xlarge instances as follows:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20,35,30
+
+   * - **Version**
+     - **Switches**
+     - **Throughput**
+   * - 2.8.0-rc5 MMAPv1
+     - -t 16 -cd tiny -c 500000 -ix
+     - 13.2k ops (500k inserts)
+   * - 2.8.0-rc5 MMAPv1
+     - -t 16 -cd tiny -c 100000
+     - 11.9k ops (100k i, 400k u)
+   * - 2.8.0-rc5 wt
+     - -t 16 -cd tiny -c 500000 -ix
+     - 13.2k ops (500k inserts)
+   * - 2.8.0-rc5 wt
+     - -t 16 -cd tiny -c 100000
+     - 11.9k ops (100k i, 400k u)
+   * 2.6.4
+     - -t 16 -cd tiny -c 500000 -ix
+     - 13.8k ops (500k inserts)
+   * 2.6.4
+     - -t 16 -cd tiny -c 100000
+     - 8.6k ops (empty db; 100k i, 400k u)
+
+
 Firehose thread-pool framework
 ------------------------------
 
@@ -194,7 +226,7 @@ Additional dependencies are:
     - `MongoDB Java Driver <http://docs.mongodb.org/ecosystem/drivers/java/>`_
     - `JUnit 4 <http://junit.org/>`_
     - `Apache Commons CLI 1.2 <http://commons.apache.org/proper/commons-cli/>`_
-    - `Firehose thread-pool framework <https://github.com/dave-finnegan/Firehose>>`_
+    - `Firehose thread-pool framework <https://github.com/dave-finnegan/Firehose>`_
 
     
 License
