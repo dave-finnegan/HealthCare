@@ -178,7 +178,7 @@ Building
 
 The application is java based and includes a maven build configuration.  It also relies upon the Firehose application framework.
 
-To build the application first download the Firehose framework and run the 'mvn install' command to build and install the framework jar.  Then run the 'mvn package' command within the HealthCare application directory.  From there the target jar can be driven either without arguments to get usage information, or with arguments as shown in the example above.
+To build the application first download the Firehose framework (see dependencies below) and run the 'mvn install' command to build and install the framework jar.  Then run the 'mvn package' command within the HealthCare application directory.  From there the target jar can be driven either without arguments to get usage information, or with arguments as shown in the example above.
 
 Deployment
 ----------
