@@ -202,36 +202,10 @@ Preliminary testing shows throughput rates for a 3-node replica set running on m
    * - 2.8.0-rc5 wt
      - -t 16 -cd tiny -c 100000
      - 11.9k ops (100k i, 400k u)
-   * 2.6.4
+   * - 2.6.4
      - -t 16 -cd tiny -c 500000 -ix
      - 13.8k ops (500k inserts)
-   * 2.6.4
-     - -t 16 -cd tiny -c 100000
-     - 8.6k ops (empty db; 100k i, 400k u)
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20,35,30
-
-   * - **Version**
-     - **Switches**
-     - **Throughput**
-   * - 2.8.0-rc5 MMAPv1
-     - -t 16 -cd tiny -c 500000 -ix
-     - 13.2k ops (500k inserts)
-   * - 2.8.0-rc5 MMAPv1
-     - -t 16 -cd tiny -c 100000
-     - 11.9k ops (100k i, 400k u)
-   * - 2.8.0-rc5 wt
-     - -t 16 -cd tiny -c 500000 -ix
-     - 13.2k ops (500k inserts)
-   * - 2.8.0-rc5 wt
-     - -t 16 -cd tiny -c 100000
-     - 11.9k ops (100k i, 400k u)
-   * 2.6.4
-     - -t 16 -cd tiny -c 500000 -ix
-     - 13.8k ops (500k inserts)
-   * 2.6.4
+   * - 2.6.4
      - -t 16 -cd tiny -c 100000
      - 8.6k ops (empty db; 100k i, 400k u)
 
