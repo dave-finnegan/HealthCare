@@ -195,19 +195,19 @@ Preliminary testing shows throughput rates for a 3-node replica set running on m
      - 13.2k ops (500k inserts)
    * - 2.8.0-rc5 MMAPv1
      - -t 16 -cd tiny -c 100000
-     - 11.9k ops (100k i, 400k u)
+     - 11.9k ops (100k inserts, 400k updates)
    * - 2.8.0-rc5 wt
      - -t 16 -cd tiny -c 500000 -ix
      - 13.2k ops (500k inserts)
    * - 2.8.0-rc5 wt
      - -t 16 -cd tiny -c 100000
-     - 11.9k ops (100k i, 400k u)
+     - 11.9k ops (100k inserts, 400k updates)
    * - 2.6.4
      - -t 16 -cd tiny -c 500000 -ix
      - 13.8k ops (500k inserts)
    * - 2.6.4
      - -t 16 -cd tiny -c 100000
-     - 8.6k ops (100k i, 400k u)
+     - 8.6k ops (100k inserts, 400k updates)
 
 
 Firehose thread-pool framework
