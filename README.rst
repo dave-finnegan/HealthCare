@@ -207,7 +207,7 @@ Preliminary testing shows throughput rates for a 3-node replica set running on m
      - 13.8k ops (500k inserts)
    * - 2.6.4
      - -t 16 -cd tiny -c 100000
-     - 8.6k ops (empty db; 100k i, 400k u)
+     - 8.6k ops (100k i, 400k u)
 
 
 Firehose thread-pool framework
