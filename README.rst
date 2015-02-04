@@ -190,11 +190,9 @@ Preliminary testing shows throughput rates for a 3-node replica set running on m
    * - **Version**
      - **Switches**
      - **Throughput**
-     - **description**
    * - 2.8.0-rc5 MMAPv1
      - -t 16 -cd tiny -c 500000 -ix
      - 13.2k ops (500k inserts)
-     - xxx
 
 .. list-table::
    :header-rows: 1
