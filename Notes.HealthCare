@@ -53,9 +53,10 @@
       trauma_center: boolean - rnd(true, false)
       physicians: [phy_id, phy_id, ..]
       }
-    physicians 1M {
+    physicians 50k {
       _id: integer - rnd(0-1000000)
-      name: string - "Dr."+last[_id]
+      first: string
+      last: string
       addr: {
         street: string - streets[rnd(0-5000)]
         city: string - city[cid][0]; cid=rnd(0-10000)
@@ -74,8 +75,8 @@
         state: string - city[cid][1]
         zip: int - city[cid][2]
       }
-      physician: [phy_id, phy_id, ..] (1-60%, 2-30%, 3-10%); phy_id=rnd(0-50000)
-      procedure: [pro_id, pro_id, ..] (<10-80%, <100-20%); pro_id=rnd(0-150)
+      physicians: [phy_id, phy_id, ..] (1-60%, 2-30%, 3-10%); phy_id=rnd(0-50000)
+      procedures: [pro_id, pro_id, ..] (<10-80%, <100-20%); pro_id=rnd(0-150)
       }
     procedures 70M {
       _id: integer - rnd(0-150)
@@ -90,9 +91,6 @@
       _id: ObjectId() - rec_oid
       type: string - rec_types[rnd(0-3)] 
         # txt_1k(40%), jpg_200k(20%), pdf_500k(20%), pdf_1M(10%), pdf_13M(10%)
-      hospital: hos_id - rnd(0-250)
-      physician: phy_id - rnd(0-50000)
-      patient: pat_id - rnd(0-1000000000)
       procedure: pro_id - rnd(0-150)
       content: binary - rec_bin[type]
         # data-1k.txt, data-200k.jpg, data-500k.pdf, data-1M.pdf, data-13M.pdf
