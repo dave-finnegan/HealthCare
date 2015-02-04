@@ -185,16 +185,16 @@ Preliminary testing shows throughput rates for a 3-node replica set running on m
 
 .. list-table::
    :header-rows: 1
-   :widths: 10,25,20,90
+   :widths: 20,35,30,90
 
-   * - **option**
-     - **long form**
-     - **type**
+   * - **Version**
+     - **Switches**
+     - **Throughput**
      - **description**
-   * - -c
-     - --count
-     - integer
-     - number of records to insert (required)
+   * - 2.8.0-rc5 MMAPv1
+     - -t 16 -cd tiny -c 500000 -ix
+     - 13.2k ops (500k inserts)
+     - xxx
 
 .. list-table::
    :header-rows: 1
