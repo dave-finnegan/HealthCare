@@ -6,7 +6,7 @@
                 "longOpt" : "count",
                 "name": "count",
                 "description":"Number of records to insert; default 1",
-                "required": false,
+                "required": true,
                 "args" : 1
             },
             {
@@ -27,7 +27,7 @@
                 "op": "cd",
                 "longOpt" : "content_sub_dir",
                 "name": "content_sub_dir",
-                "description":"sub-directory under resources/content for record content files",
+                "description":"sub-directory under resources/content for record content files (large, [small], tiny)",
                 "required": false,
                 "args" : 1
             },
