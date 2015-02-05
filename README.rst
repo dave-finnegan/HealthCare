@@ -21,7 +21,7 @@ Options exist to change the load charateristics in the following ways:
 
   - Insert only: Create only the patient record document which drives an insert only work load (-ix command line switch)
   - Large/Small/Tiny: Create patient record content of varying size to simulate docs/sec or MB/sec work loads (-cd large|small|tiny)
-  - DB per Collection: Create a seperate DB for each of the five collections allowing for write lock load testing (-dbpercol)
+  - DB per Collection: Create a seperate DB for each of the five collections allowing for write lock load testing on 2.6.x versions of MongoDB (-dbpercol)
   - Thread count: Specify number of threads per application client (-t <cnt>)
   - Write Concern, journal, fsync: Specify write options (-wc, -wj, -ws)
 
