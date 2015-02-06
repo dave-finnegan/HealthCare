@@ -1,5 +1,5 @@
 {
-    "mdbSimple": {
+    "HealthCare": {
         "options": [
             {
                 "op": "c",
@@ -13,9 +13,77 @@
                 "op": "db",
                 "longOpt" : "dbname",
                 "name": "dbname",
-                "description":"database name; default 'mdbSimple'",
+                "description":"database name; default 'hcd'",
                 "required": false,
                 "args" : 1
+            },
+            {
+                "op": "dbpercol",
+                "longOpt" : "dbpercol",
+                "name": "DB per Collection",
+                "description": "Use a seperate DB per collection",
+            },
+            {
+                "op": "cd",
+                "longOpt" : "content_sub_dir",
+                "name": "content_sub_dir",
+                "description":"sub-directory under resources/content for record content files (large, [small], tiny)",
+                "required": false,
+                "args" : 1
+            },
+            {
+                "op": "fh",
+                "longOpt" : "hospitals_file",
+                "name": "hospital filepath",
+                "description":"filename to import hospital data from",
+                "required": false,
+                "args" : 1
+            },
+            {
+                "op": "fp",
+                "longOpt" : "procedures_file",
+                "name": "procedure filepath",
+                "description":"filename to import procedure data from",
+                "required": false,
+                "args" : 1
+            },
+            {
+                "op": "fc",
+                "longOpt" : "city_file",
+                "name": "city filepath",
+                "description":"filename to import city data from",
+                "required": false,
+                "args" : 1
+            },
+            {
+                "op": "fs",
+                "longOpt" : "streets_file",
+                "name": "streets filepath",
+                "description":"filename to import street data from",
+                "required": false,
+                "args" : 1
+            },
+            {
+                "op": "ff",
+                "longOpt" : "first_file",
+                "name": "first filepath",
+                "description":"filename to import first name data from",
+                "required": false,
+                "args" : 1
+            },
+            {
+                "op": "fl",
+                "longOpt" : "last_file",
+                "name": "last filepath",
+                "description":"filename to import last name data from",
+                "required": false,
+                "args" : 1
+            },
+            {
+                "op": "ix",
+                "longOpt" : "insert_only",
+                "name": "insert only",
+                "description": "Skip procedure, patient, physician, hospital updates",
             },
             {
                 "op": "v",
