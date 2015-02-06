@@ -298,7 +298,7 @@ public class HealthCare implements Executor {
                 // Various IDs
                 int hospitalId = rnd.nextInt(hospitalCB.linesRead);
                 int physicianId = rnd.nextInt(50000);   // 50k US doctors
-                int patientId = rnd.nextInt(300000000); // 300M US pop.; ssn
+                int patientId = rnd.nextInt(899999999)+100000000;
                 int procedureIdx = rnd.nextInt(proceduresCB.linesRead);
                 ObjectId procedureId = ObjectId.get();
                 ObjectId recordId = ObjectId.get();
